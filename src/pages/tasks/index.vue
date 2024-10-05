@@ -13,9 +13,7 @@ const getTasks = async () => {
   tasks.value = data
 }
 
-;(async () => {
-  await getTasks()
-})()
+await getTasks()
 
 const columns: ColumnDef<Tables<'tasks'>>[] = [
   {

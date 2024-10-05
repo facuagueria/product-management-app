@@ -13,9 +13,7 @@ const getProjects = async () => {
   projects.value = data
 }
 
-;(async () => {
-  await getProjects()
-})()
+await getProjects()
 
 const columns: ColumnDef<Tables<'projects'>>[] = [
   {
