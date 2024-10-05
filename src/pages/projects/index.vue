@@ -3,6 +3,8 @@ import { supabase, type Tables } from '@/lib/supabaseClient'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { RouterLink } from 'vue-router'
 
+usePageStore().pageData.title = 'Projects'
+
 const projects = ref<Tables<'projects'>[] | null>(null)
 
 const getProjects = async () => {
