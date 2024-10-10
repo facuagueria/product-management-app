@@ -6,6 +6,21 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach(async (to, from) => {
+  const authStore = useAuthStore()
+  await authStore.getSession()
+
+  const isAuthPage = ['/login', '/register'].includes(to.name)
+
+  if (!authStore.user && !isAuthPage) {
+    return { name: '/login' }
+  }
+
+  if (authStore.user && isAuthPage) {
+    return { name: '/' }
+  }
+})
+
 if (import.meta.hot) {
   handleHotUpdate(router)
 }

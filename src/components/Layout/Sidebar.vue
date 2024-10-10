@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { logout } from '@/utils/supaAuth'
+
 const links = [
   {
     title: 'Dashboard',
@@ -30,10 +32,20 @@ const accountLinks = [
   },
   {
     title: 'Sign out',
-    to: '/signout',
     icon: 'lucide:log-out'
   }
 ]
+
+const router = useRouter()
+
+const executeAction = async (linkTitle: string) => {
+  if (linkTitle === 'Sign out') {
+    const { logout } = await import('@/utils/supaAuth')
+    const isLoggedOut = await logout()
+
+    if (isLoggedOut) router.push({ name: '/login' })
+  }
+}
 </script>
 
 <template>
@@ -56,7 +68,7 @@ const accountLinks = [
       </div>
 
       <div class="border-y text-center bg-background py-3">
-        <SidebarLinks :links="accountLinks" />
+        <SidebarLinks :links="accountLinks" @action-clicked="(payload) => executeAction(payload)" />
       </div>
     </nav>
   </aside>
