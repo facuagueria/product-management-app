@@ -5,12 +5,17 @@ const formData = ref({
   email: '',
   password: ''
 })
+
+const { serverError, handleServerError } = useFormErrors()
+
 const router = useRouter()
 
 const signIn = async () => {
-  const isLoggedIn = await login(formData.value)
+  const { error } = await login(formData.value)
 
-  if (isLoggedIn) return router.push('/')
+  if (!error) return router.push('/')
+
+  handleServerError(error)
 }
 </script>
 
@@ -35,6 +40,7 @@ const signIn = async () => {
               type="email"
               placeholder="johndoe19@example.com"
               required
+              :class="{ 'border-red-500': serverError }"
             />
           </div>
           <div class="grid gap-2">
@@ -48,8 +54,12 @@ const signIn = async () => {
               type="password"
               autocomplete
               required
+              :class="{ 'border-red-500': serverError }"
             />
           </div>
+          <ul class="text-sm text-left text-red-500" v-if="serverError">
+            <li class="list-disc">{{ serverError }}</li>
+          </ul>
           <Button type="submit" class="w-full"> Login </Button>
         </form>
         <div class="mt-4 text-sm text-center">
