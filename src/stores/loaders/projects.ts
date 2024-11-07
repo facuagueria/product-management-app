@@ -2,18 +2,18 @@ import { type Projects, projectsQuery } from '@/utils/supaQueries'
 import { useMemoize } from '@vueuse/core'
 
 export const useProjectsStore = defineStore('projects-store', () => {
-  const projects = ref<Projects | null>(null)
+  const projects = ref<Projects | null>([])
   const loadProjects = useMemoize(async (key: string) => await projectsQuery)
 
   const validateCache = () => {
     if (projects.value?.length) {
-      projectsQuery.then(({ data }) => {
+      projectsQuery.then(({ data, error }) => {
         if (JSON.stringify(projects.value) === JSON.stringify(data)) {
-          console.log('Cached and fres data matched!')
           return
         } else {
-          console.log('Something has changed!')
           loadProjects.delete('projects')
+
+          if (!error && data) projects.value = data
         }
       })
     }
@@ -24,7 +24,7 @@ export const useProjectsStore = defineStore('projects-store', () => {
 
     if (error) useErrorStore().setError({ error, customCode: status })
 
-    projects.value = data
+    if (data) projects.value = data
 
     validateCache()
   }
