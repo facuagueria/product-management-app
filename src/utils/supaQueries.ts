@@ -28,3 +28,9 @@ export const profileQuery = ({ column, value }: { column: string; value: string 
 }
 
 export type Profile = QueryData<ReturnType<typeof profileQuery>>
+
+export const groupedProfilesQuery = (userIds: string[]) => {
+  return supabase.from('profiles').select('id, username, avatar_url, full_name').in('id', userIds)
+}
+
+export type Collabs = QueryData<ReturnType<typeof groupedProfilesQuery>>
