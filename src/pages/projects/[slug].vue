@@ -40,11 +40,11 @@ await getProject(slug)
       <TableCell>
         <div class="flex">
           <Avatar
-            class="-mr-4 border border-primary hover:scale-110 transition-transform"
+            class="-mr-4 border border-primary transition-transform hover:scale-110"
             v-for="collab in project.collaborators"
             :key="collab"
           >
-            <RouterLink class="w-full h-full flex items-center justify-center" to="">
+            <RouterLink class="flex h-full w-full items-center justify-center" to="">
               <AvatarImage src="" alt="" />
               <AvatarFallback> </AvatarFallback>
             </RouterLink>
@@ -54,7 +54,7 @@ await getProject(slug)
     </TableRow>
   </Table>
 
-  <section v-if="project" class="mt-10 flex flex-col md:flex-row gap-5 justify-between grow">
+  <section v-if="project" class="mt-10 flex grow flex-col justify-between gap-5 md:flex-row">
     <div class="flex-1">
       <h2>Tasks</h2>
       <div class="table-container">
@@ -79,7 +79,7 @@ await getProject(slug)
     <div class="flex-1">
       <h2>Documents</h2>
       <div class="table-container">
-        <p class="text-muted-foreground text-sm font-semibold px-4 py-3">
+        <p class="px-4 py-3 text-sm font-semibold text-muted-foreground">
           This project doesn't have documents yet...
         </p>
         <!-- <Table>
@@ -107,10 +107,10 @@ th {
 }
 
 h2 {
-  @apply mb-4 text-lg font-semibold w-fit;
+  @apply mb-4 w-fit text-lg font-semibold;
 }
 
 .table-container {
-  @apply overflow-hidden overflow-y-auto rounded-md bg-slate-900 h-80;
+  @apply h-80 overflow-hidden overflow-y-auto rounded-md bg-slate-900;
 }
 </style>
