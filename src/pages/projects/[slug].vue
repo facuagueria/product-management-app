@@ -13,6 +13,12 @@ watch(
 )
 
 await getProject(slug)
+
+const { getProfilesByIds } = useCollabs()
+
+const collabs = project.value?.collaborators
+  ? await getProfilesByIds(project.value.collaborators)
+  : []
 </script>
 
 <template>
@@ -26,7 +32,7 @@ await getProject(slug)
     <TableRow>
       <TableHead> Description </TableHead>
       <TableCell>
-        <AppInPlaceEditText v-model="project.description" @commit="updateProject" />
+        <AppInPlaceEditTextarea v-model="project.description" @commit="updateProject" />
       </TableCell>
     </TableRow>
     <TableRow>
@@ -41,11 +47,14 @@ await getProject(slug)
         <div class="flex">
           <Avatar
             class="-mr-4 border border-primary transition-transform hover:scale-110"
-            v-for="collab in project.collaborators"
-            :key="collab"
+            v-for="collab in collabs"
+            :key="collab.id"
           >
-            <RouterLink class="flex h-full w-full items-center justify-center" to="">
-              <AvatarImage src="" alt="" />
+            <RouterLink
+              class="flex h-full w-full items-center justify-center"
+              :to="{ name: '/users/[username]', params: { username: collab.username } }"
+            >
+              <AvatarImage :src="collab.avatar_url || ''" alt="" />
               <AvatarFallback> </AvatarFallback>
             </RouterLink>
           </Avatar>
@@ -68,8 +77,17 @@ await getProject(slug)
           </TableHeader>
           <TableBody>
             <TableRow v-for="task in project.tasks" :key="task.id">
-              <TableCell> {{ task.name }} </TableCell>
-              <TableCell> {{ task.status }} </TableCell>
+              <TableCell class="p-0">
+                <RouterLink
+                  class="block p-4 text-left hover:bg-muted"
+                  :to="{ name: '/tasks/[id]', params: { id: task.id } }"
+                >
+                  {{ task.name }}
+                </RouterLink>
+              </TableCell>
+              <TableCell>
+                <AppInPlaceEditStatus :model-value="task.status" readonly />
+              </TableCell>
               <TableCell> {{ task.due_date }} </TableCell>
             </TableRow>
           </TableBody>
